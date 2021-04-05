@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv/config");
 
+const userRoutes = require("./routes/user");
+
 //Connect to DB
 mongoose
   .connect(process.env.DB_CONNECTION, {
@@ -29,5 +31,7 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+
+app.use("/api/auth", userRoutes);
 
 module.exports = app;
