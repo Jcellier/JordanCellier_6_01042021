@@ -4,11 +4,12 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 require("dotenv/config");
 const path = require("path");
+const helmet = require("helmet");
 
 const userRoutes = require("./routes/user");
 const sauceRoutes = require("./routes/sauce");
 
-//Connect to DB
+//Connexion à MongoDB
 mongoose
   .connect(process.env.DB_CONNECTION, {
     useNewUrlParser: true,
@@ -19,6 +20,7 @@ mongoose
     console.log("Connection to MongoDB has failed!" + "Error : " + err)
   );
 
+// Headers CORS
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -33,9 +35,9 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json());
+app.use(helmet());
 
 app.use("/images", express.static(path.join(__dirname, "images")));
-
 app.use("/api/auth", userRoutes);
 app.use("/api/sauces", sauceRoutes);
 
